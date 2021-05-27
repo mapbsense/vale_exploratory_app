@@ -277,12 +277,12 @@ def build_preds_view(result, current_df):
 def render_page_content(pathname):
     parsed = urlparse.urlparse(pathname)
     parsed_query = urlparse.parse_qs(parsed.query)
-    if parsed.path == r'//' or parsed.path is None:
+    if parsed.path == r'///' or parsed.path is None:
         return "Welcome"
         # raise PreventUpdate
 
-    elif parsed.path == r"//store" or parsed.path == r"//pred":
-        from_dir = 'datasets' if parsed.path == r"//store" else 'predictions'
+    elif parsed.path == r"///store" or parsed.path == r"///pred":
+        from_dir = 'datasets' if parsed.path == r"///store" else 'predictions'
         try:
             selected_df = parsed_query['data'][0]
             df, dfd = fn_to_df_(selected_df + '.csv', from_=from_dir, describe=True)
@@ -305,7 +305,7 @@ def render_page_content(pathname):
             return dbc.Alert([html.H4(str(e), className="alert-heading")], color="info")
         return card
 
-    elif parsed.path == r"//predict":
+    elif parsed.path == r"///predict":
         try:
             # TODO funcionality for several model (list of models)
             parsed_kwargs = {key: value[0] for (key, value) in parsed_query.items()}
@@ -322,7 +322,7 @@ def render_page_content(pathname):
             return dbc.Alert(str(e), color="warning"),
         return view
 
-    elif parsed.path == r'//upload':
+    elif parsed.path == r'///upload':
         return drop_file_form, html.Div(id='output-data-upload')
 
     # If the user tries to reach a different page, return a 404 message
@@ -477,7 +477,7 @@ def exclude_cols_options(update, labeled_dfm, bar_feat, y_ax_feat, color_feat):
     return bar_ex(labeled_dfm, lbl=bar_feat, col=color_feat, y_=y_ax_feat)
 
 
-@app.server.route(r'//temp/<pagename>')
+@app.server.route(r'///temp/<pagename>')
 def serve_template(pagename):
     return render_template(pagename + '.html')
 
